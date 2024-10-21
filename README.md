@@ -48,7 +48,7 @@ Usage
 Tech Stack
 
     React
-    Tailwind CSS
+    CSS
     localStorage for task persistence
 
 
