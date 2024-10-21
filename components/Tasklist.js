@@ -1,55 +1,70 @@
-import React from 'react';
-import { Edit2, Trash, CheckSquare } from 'lucide-react';
+import { CheckCircle, Edit3, Trash2 } from 'lucide-react'; // Import icons
 
 const TaskList = ({ tasks, onDelete, onComplete, onEdit }) => {
+  if (tasks.length === 0) {
+    return (
+      <div className="p-4 text-center text-gray-400">
+        No tasks available.
+      </div>
+    );
+  }
+
+  const getPriorityColor = (priority) => {
+    switch (priority) {
+      case 'high':
+        return 'bg-red-500';
+      case 'medium':
+        return 'bg-yellow-500';
+      case 'low':
+        return 'bg-green-500';
+      default:
+        return 'bg-gray-500';
+    }
+  };
+
   return (
-    <ul className="p-4 space-y-4">
-      {tasks.length === 0 && (
-        <p className="text-center text-gray-400">No tasks available.</p>
-      )}
+    <ul className="divide-y divide-gray-600">
       {tasks.map((task) => (
-        <li
-          key={task.id}
-          className={`bg-gray-700 p-4 rounded-md shadow-md flex justify-between items-center ${
-            task.isCompleted ? 'opacity-50' : ''
-          }`}
-        >
-          <div>
-            <h3 className="text-white font-bold">{task.title}</h3>
-            <p className="text-gray-300">{task.description}</p>
-            <p className="text-gray-400 text-sm">
-              Due: {task.dueDate} at {task.dueTime}
-            </p>
-            <span
-              className={`inline-block mt-2 px-2 py-1 text-xs font-bold rounded-full ${
-                task.priority === 'high'
-                  ? 'bg-red-500 text-white'
-                  : task.priority === 'medium'
-                  ? 'bg-yellow-500 text-black'
-                  : 'bg-green-500 text-black'
-              }`}
-            >
-              {task.priority.charAt(0).toUpperCase() + task.priority.slice(1)}
-            </span>
+        <li key={task.id} className="p-4 flex justify-between items-center bg-gray-700 hover:bg-gray-600 rounded-md mb-2 transition duration-200">
+          <div className="flex items-center space-x-3">
+            {/* Priority Indicator */}
+            <span className={`w-4 h-4 rounded-full ${getPriorityColor(task.priority)}`} title={`Priority: ${task.priority}`}></span>
+
+            <div>
+              <h3 className={`text-lg font-bold ${task.isCompleted ? 'line-through text-gray-500' : 'text-white'}`}>
+                {task.title}
+              </h3>
+              <p className="text-sm text-gray-400">{task.description}</p>
+              <p className="text-sm text-gray-500">Due: {task.dueDate} at {task.dueTime}</p>
+            </div>
           </div>
-          <div className="flex items-center space-x-2">
+
+          <div className="flex space-x-2">
+            {/* Complete Button */}
             <button
               onClick={() => onComplete(task.id)}
-              className="text-green-500 hover:text-green-400 transition"
+              className={`p-2 rounded-md shadow-md text-white ${task.isCompleted ? 'bg-green-600 hover:bg-green-700' : 'bg-blue-600 hover:bg-blue-700'} transition duration-200`}
+              title={task.isCompleted ? 'Undo Complete' : 'Mark as Complete'}
             >
-              <CheckSquare />
+              <CheckCircle size={20} />
             </button>
+
+            {/* Edit Button */}
             <button
               onClick={() => onEdit(task)}
-              className="text-yellow-500 hover:text-yellow-400 transition"
+              className="p-2 bg-yellow-500 hover:bg-yellow-600 rounded-md shadow-md text-white transition duration-200"
+              title="Edit Task"
             >
-              <Edit2 />
+              <Edit3 size={20} />
             </button>
+
+            {/* Delete Button */}
             <button
               onClick={() => onDelete(task.id)}
-              className="text-red-500 hover:text-red-400 transition"
+              className="p-2 bg-red-600 hover:bg-red-700 rounded-md shadow-md text-white transition duration-200"
+              title="Delete Task"
             >
-              <Trash />
+              <Trash2 size={20} />
             </button>
           </div>
         </li>

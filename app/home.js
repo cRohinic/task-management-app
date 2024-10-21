@@ -1,10 +1,10 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Swal from 'sweetalert2';
-import TaskForm from '../components/TaskForm';
 import TaskList from '../components/TaskList';
+import TaskForm from '../components/TaskForm';
 import { Search } from 'lucide-react';
+import Swal from 'sweetalert2'; // Make sure you have this installed or remove if not needed
 
 const Home = () => {
   const [tasks, setTasks] = useState([]);
@@ -89,15 +89,20 @@ const Home = () => {
 
   const saveEditTask = (updatedTask) => {
     const updatedTasks = tasks.map((task) =>
-      task.id === updatedTask.id ? { ...updatedTask, dueDate, dueTime } : task
+      task.id === updatedTask.id ? updatedTask : task
     );
     setTasks(updatedTasks);
     setEditingTask(null);
+    setDueDate('');
+    setDueTime('');
+
     Swal.fire('Updated!', 'Task has been edited successfully.', 'success');
   };
 
   const cancelEdit = () => {
     setEditingTask(null);
+    setDueDate('');
+    setDueTime('');
   };
 
   const filteredTasks = tasks.filter(
@@ -129,7 +134,7 @@ const Home = () => {
           <Search className="absolute left-3 top-2 text-gray-400" />
         </div>
 
-        {/* Native Date and Time Input for Due Date and Time */}
+        {/* Date and Time Inputs */}
         <div className="mb-4 flex items-center justify-center">
           <label className="text-white mr-2">Select Due Date:</label>
           <input

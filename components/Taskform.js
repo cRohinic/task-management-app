@@ -3,8 +3,9 @@ import React, { useState, useEffect } from 'react';
 const TaskForm = ({ onAddTask, editingTask, onSaveEdit, onCancelEdit, dueDate, setDueDate, dueTime, setDueTime }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [priority, setPriority] = useState('medium');
+  const [priority, setPriority] = useState('medium'); // Default priority
 
+  // Populate the form when editingTask is present
   useEffect(() => {
     if (editingTask) {
       setTitle(editingTask.title);
@@ -23,6 +24,13 @@ const TaskForm = ({ onAddTask, editingTask, onSaveEdit, onCancelEdit, dueDate, s
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // Form validation
+    if (!title.trim() || !dueDate || !dueTime) {
+      alert('Please fill out the task title, date, and time.');
+      return;
+    }
+
     const newTask = { title, description, priority, dueDate, dueTime };
 
     if (editingTask) {
@@ -55,8 +63,6 @@ const TaskForm = ({ onAddTask, editingTask, onSaveEdit, onCancelEdit, dueDate, s
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           className="w-full p-2 bg-gray-700 text-white border border-gray-600 rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
-          rows="3"
-          required
         />
       </div>
 
@@ -65,19 +71,18 @@ const TaskForm = ({ onAddTask, editingTask, onSaveEdit, onCancelEdit, dueDate, s
         <select
           value={priority}
           onChange={(e) => setPriority(e.target.value)}
-          className="w-full p-2 bg-gray-700 text-white border border-gray-600 rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
-          required
+          className="w-full p-2 bg-gray-700 text-white border border-gray-600 rounded-md shadow-md"
         >
-          <option value="low">Low</option>
-          <option value="medium">Medium</option>
           <option value="high">High</option>
+          <option value="medium">Medium</option>
+          <option value="low">Low</option>
         </select>
       </div>
 
-      <div className="flex justify-between">
+      <div className="flex justify-end space-x-2">
         <button
           type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded-md shadow-md hover:bg-blue-500 transition duration-200"
+          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-md text-white shadow-md transition duration-200"
         >
           {editingTask ? 'Save Changes' : 'Add Task'}
         </button>
@@ -86,7 +91,7 @@ const TaskForm = ({ onAddTask, editingTask, onSaveEdit, onCancelEdit, dueDate, s
           <button
             type="button"
             onClick={onCancelEdit}
-            className="bg-red-600 text-white px-4 py-2 rounded-md shadow-md hover:bg-red-500 transition duration-200"
+            className="px-4 py-2 bg-gray-500 hover:bg-gray-600 rounded-md text-white shadow-md transition duration-200"
           >
             Cancel
           </button>
